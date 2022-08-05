@@ -1,9 +1,11 @@
 import React, { useMemo } from 'react';
+import classnames from 'classnames';
 
 import useGetAge from '../../../hooks/useGetAge';
 import useStyles from './hooks/useStyles';
+import { IProps } from './interfaces';
 
-const Details: React.FC = () => {
+const Details: React.FC<IProps> = ({ visible }) => {
     const classes = useStyles();
     const age = useGetAge();
 
@@ -13,7 +15,12 @@ const Details: React.FC = () => {
     );
 
     return (
-        <div className={classes.container}>
+        <div
+            className={classnames(
+                classes.container,
+                visible && classes.containerVisible,
+            )}
+        >
             <p className={classes.name}>Salem Cresswell</p>
 
             <p className={classes.profession}>SOFTWARE ENGINEER</p>

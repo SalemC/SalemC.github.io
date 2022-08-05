@@ -10,6 +10,8 @@ import Details from './components/Details';
 import useStyles from './hooks/useStyles';
 import Tree from '../classes/Tree';
 
+const TREE_MAX_AGE = 10;
+
 const Main: React.FC = () => {
     const canvasRef = createRef<HTMLCanvasElement>();
     const [treeAge, setTreeAge] = useState(1);
@@ -54,7 +56,7 @@ const Main: React.FC = () => {
     }, [render]);
 
     useEffect(() => {
-        if (treeAge >= 10) return;
+        if (treeAge >= TREE_MAX_AGE) return;
 
         const timeout = setTimeout(() => {
             setTreeAge((n) => n + 1);
@@ -71,7 +73,7 @@ const Main: React.FC = () => {
         <>
             <canvas className={classes.canvas} ref={canvasRef} />
 
-            <Details />
+            <Details visible={treeAge >= TREE_MAX_AGE} />
         </>
     );
 };

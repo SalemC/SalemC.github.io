@@ -7,6 +7,12 @@ export default createUseStyles({
         left: 50,
         borderRadius: 8,
         maxWidth: 400,
+        opacity: 0,
+        transition: 'opacity 0.4s ease-in-out',
+    },
+
+    containerVisible: {
+        opacity: 1,
     },
 
     name: {
