@@ -1,28 +1,24 @@
 {
     "name": "snow-globe",
     "version": "0.1.0",
+    "homepage": "https://salemc.github.io",
     "private": false,
     "dependencies": {
-        "@testing-library/jest-dom": "^5.15.0",
-        "@testing-library/react": "^11.2.7",
-        "@testing-library/user-event": "^12.8.3",
-        "@types/jest": "^26.0.24",
-        "@types/node": "^12.20.37",
-        "@types/react-dom": "^17.0.11",
         "classnames": "^2.3.1",
         "moment": "^2.29.4",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
         "react-jss": "^10.9.2",
         "react-scripts": "4.0.3",
-        "typescript": "^4.4.4",
-        "web-vitals": "^1.1.2"
+        "typescript": "^4.4.4"
     },
     "scripts": {
         "start": "react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test",
-        "eject": "react-scripts eject"
+        "eject": "react-scripts eject",
+        "predeploy": "npm run build",
+        "deploy": "gh-pages -d build"
     },
     "eslintConfig": {
         "extends": [
@@ -43,6 +39,13 @@
         ]
     },
     "devDependencies": {
-        "@types/react": "^18.0.15"
+        "@testing-library/jest-dom": "^5.15.0",
+        "@testing-library/react": "^11.2.7",
+        "@testing-library/user-event": "^12.8.3",
+        "@types/jest": "^26.0.24",
+        "@types/node": "^12.20.37",
+        "@types/react-dom": "^17.0.11",
+        "@types/react": "^18.0.15",
+        "gh-pages": "^4.0.0"
     }
 }
