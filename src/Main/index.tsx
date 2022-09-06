@@ -6,16 +6,21 @@ import React, {
     useLayoutEffect,
 } from 'react';
 
+import useGenerateBackground from './hooks/useGenerateBackground';
 import Details from './components/Details';
 import useStyles from './hooks/useStyles';
 import Tree from '../classes/Tree';
+import { ETheme } from './enums';
 
 const TREE_MAX_AGE = 10;
 
 const Main: React.FC = () => {
     const canvasRef = createRef<HTMLCanvasElement>();
+    const [theme, setTheme] = useState(ETheme.LIGHT);
     const [treeAge, setTreeAge] = useState(1);
     const classes = useStyles();
+
+    const generateBackground = useGenerateBackground(theme);
 
     const render = useCallback(() => {
         const { current: canvas } = canvasRef;
@@ -29,11 +34,7 @@ const Main: React.FC = () => {
 
         if (!context) return;
 
-        const background = context.createLinearGradient(0, 0, 0, canvas.height);
-
-        background.addColorStop(0, 'rgb(33, 102, 155)');
-        background.addColorStop(0.3, 'rgb(87, 193, 235)');
-        background.addColorStop(0.7, 'rgb(255, 255, 255)');
+        const background = generateBackground(context, canvas.height);
 
         context.fillStyle = background;
         context.fillRect(0, 0, canvas.width, canvas.height);
@@ -45,7 +46,23 @@ const Main: React.FC = () => {
         ).draw(context);
 
         context.fillStyle = context;
-    }, [canvasRef, treeAge]);
+    }, [canvasRef, treeAge, generateBackground]);
+
+    useEffect(() => {
+        const listener = (event: KeyboardEvent) => {
+            if (!['T', 't'].includes(event.key)) return;
+
+            setTheme((theme) =>
+                theme === ETheme.LIGHT ? ETheme.DARK : ETheme.LIGHT,
+            );
+        };
+
+        document.addEventListener('keypress', listener);
+
+        return () => {
+            document.removeEventListener('keypress', listener);
+        };
+    }, []);
 
     useEffect(() => {
         window.addEventListener('resize', render);
