@@ -16,7 +16,7 @@ const TREE_MAX_AGE = 10;
 
 const Main: React.FC = () => {
     const canvasRef = createRef<HTMLCanvasElement>();
-    const [theme, setTheme] = useState(ETheme.LIGHT);
+    const [theme, setTheme] = useState(ETheme.DARK);
     const [treeAge, setTreeAge] = useState(1);
     const classes = useStyles();
 
@@ -39,13 +39,36 @@ const Main: React.FC = () => {
         context.fillStyle = background;
         context.fillRect(0, 0, canvas.width, canvas.height);
 
-        new Tree(
-            { x: canvas.width / 2, y: canvas.height },
-            treeAge * 8,
-            treeAge,
-        ).draw(context);
+        const trees = [
+            new Tree(
+                { x: canvas.width * 0.25, y: canvas.height },
+                treeAge * 4,
+                treeAge - 5,
+                Infinity,
+            ),
+
+            new Tree(
+                { x: canvas.width * 0.5, y: canvas.height },
+                treeAge * 6,
+                treeAge - 3,
+                Infinity,
+            ),
+
+            new Tree(
+                { x: canvas.width * 0.75, y: canvas.height },
+                treeAge * 8,
+                treeAge,
+                TREE_MAX_AGE - 1,
+            ),
+        ];
+
+        trees.forEach((tree) => tree.draw(context));
 
         context.fillStyle = context;
+
+        return () => {
+            trees.forEach((tree) => tree.destroy());
+        };
     }, [canvasRef, treeAge, generateBackground]);
 
     useEffect(() => {

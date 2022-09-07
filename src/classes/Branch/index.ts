@@ -7,6 +7,13 @@ const BRANCH_ANGLE_OFFSET = 22;
 
 class Branch {
     /**
+     * All the branches extending this branch.
+     *
+     * @var {Branch[]}
+     */
+    private readonly subBranches: Branch[] = [];
+
+    /**
      * Create a new brach.
      *
      * @param {IPosition} from The starting position.
@@ -14,6 +21,7 @@ class Branch {
      * @param {number} angle The angle of the branch.
      * @param {number} depth The depth of the branch.
      * @param {number} maxDepthThreshold The maximum depth threshold for the tree this branch belongs to.
+     * @param {number} edgeThreshold The threshold at which the branch is considered an "edge" branch.
      */
     public constructor(
         public readonly from: IPosition,
@@ -21,6 +29,7 @@ class Branch {
         public readonly angle: number,
         public readonly depth: number,
         public readonly maxDepthThreshold: number,
+        public readonly edgeThreshold: number = maxDepthThreshold - 2,
     ) {}
 
     /**
@@ -54,7 +63,7 @@ class Branch {
             1,
         );
 
-        if (this.depth >= this.maxDepthThreshold - 2) {
+        if (this.depth >= this.edgeThreshold) {
             context.strokeStyle = '#4D7C0F';
         } else {
             context.strokeStyle = '#5C3317';
@@ -64,6 +73,15 @@ class Branch {
         context.moveTo(this.from.x, this.from.y);
         context.lineTo(this.to.x, this.to.y);
         context.stroke();
+    }
+
+    /**
+     * Destroy this branch.
+     *
+     * @return {void}
+     */
+    public destroy(): void {
+        this.subBranches.forEach((subBranch) => subBranch.destroy());
     }
 
     /**
@@ -83,21 +101,27 @@ class Branch {
         const nextAngle = this.angle - BRANCH_ANGLE_OFFSET;
         const nextDepth = this.depth + 1;
 
-        new Branch(
-            this.to,
-            nextLength,
-            nextAngle,
-            nextDepth,
-            this.maxDepthThreshold,
-        ).draw(context);
+        this.subBranches.push(
+            new Branch(
+                this.to,
+                nextLength,
+                nextAngle,
+                nextDepth,
+                this.maxDepthThreshold,
+                this.edgeThreshold,
+            ),
 
-        new Branch(
-            this.to,
-            nextLength,
-            oppositeAngle,
-            nextDepth,
-            this.maxDepthThreshold,
-        ).draw(context);
+            new Branch(
+                this.to,
+                nextLength,
+                oppositeAngle,
+                nextDepth,
+                this.maxDepthThreshold,
+                this.edgeThreshold,
+            ),
+        );
+
+        this.subBranches.forEach((subBranch) => subBranch.draw(context));
     }
 }
 

@@ -15,17 +15,31 @@ const Details: React.FC<IProps> = ({ visible }) => {
     );
 
     return (
-        <div
-            className={classnames(
-                classes.container,
-                visible && classes.containerVisible,
-            )}
-        >
-            <p className={classes.name}>Salem Cresswell</p>
+        <div className={classes.container}>
+            <p
+                className={classnames(
+                    classes.name,
+                    visible && classes.primaryTextVisible,
+                )}
+            >
+                Salem Cresswell
+            </p>
 
-            <p className={classes.profession}>SOFTWARE ENGINEER</p>
+            <p
+                className={classnames(
+                    classes.profession,
+                    visible && classes.secondaryTextVisible,
+                )}
+            >
+                SOFTWARE ENGINEER
+            </p>
 
-            <p className={classes.description}>
+            <p
+                className={classnames(
+                    classes.description,
+                    visible && classes.secondaryTextVisible,
+                )}
+            >
                 Hey there! I&apos;m {anOrA} {age} year old full-stack software
                 engineer. I mainly use the PHP framework Laravel &amp; the
                 JavaScript framework React, paired with TypeScript.
